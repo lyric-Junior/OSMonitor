@@ -37,9 +37,5 @@ public class ServiceOrderDTO {
     private String laudoTecnico;
     private String nomeFantasia;
     private Blob imagemObjeto;
-    private int codPet;
-    private int codConsulta;
-    private int codInternacaoCirurgia;
-    private int codVacina;
     private int codHospedagem;
 }
