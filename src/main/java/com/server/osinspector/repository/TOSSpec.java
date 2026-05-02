@@ -3,13 +3,8 @@ package com.server.osinspector.repository;
 import com.server.osinspector.model.entitys.FilterBuilder;
 import com.server.osinspector.model.entitys.TOS;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ServiceOrderRepository
-        extends JpaRepository<TOS, Integer>, JpaSpecificationExecutor<TOS> {
+public class TOSSpec {
 
     public static Specification<TOS> montarFiltro(FilterBuilder filterBuilder) {
         Specification<TOS> spec = Specification.where(

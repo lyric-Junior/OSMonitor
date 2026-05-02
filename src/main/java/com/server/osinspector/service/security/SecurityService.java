@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityService {
 
     @Autowired
-    private JwtAuthFilter jwtAuthenticationFilter; // INJETAR O FILTRO
+    private JwtAuthFilter jwtAuthenticationFilter;
 
 
     @Bean

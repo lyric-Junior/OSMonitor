@@ -1,5 +1,7 @@
 package com.server.osinspector.service.security;
 
+import com.server.osinspector.model.dto.login.LoginRequest;
+import com.server.osinspector.model.dto.login.TokenResponseDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,51 +10,34 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Month;
 import java.util.Date;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "minha_chave_super_secreta_12345678901234567890"; // Mínimo 32 chars para HS256
+    private final String SECRET = "tucano-ti";
+    private final String API_KEY_VALIDA = "oryon_tech_assistencia_tecnica2344856721";
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-    }
+    private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24h
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 horas
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // ✅ CORRETO
+    public TokenResponseDTO gerarToken(LoginRequest dto) {
+
+        if (!API_KEY_VALIDA.equals(dto.getToken())) {
+            throw new RuntimeException("API Key inválida");
+        }
+
+        Date agora = new Date();
+        Date expiracao = new Date(agora.getTime() + EXPIRATION);
+
+        String token = Jwts.builder()
+                .setSubject("API_USER")
+                .setIssuedAt(agora)
+                .setExpiration(expiracao)
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
-    }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> resolver) {
-        final Claims claims = extractAllClaims(token);
-        return resolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public boolean isTokenExpired(String token) {
-        return extractClaim(token, Claims::getExpiration).before(new Date());
-    }
-
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return new TokenResponseDTO(token, EXPIRATION);
     }
 }
-
