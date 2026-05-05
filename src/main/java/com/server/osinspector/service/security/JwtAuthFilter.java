@@ -1,4 +1,4 @@
-package com.server.osinspector.config.security;
+package com.server.osinspector.service.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
