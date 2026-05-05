@@ -2,22 +2,17 @@ package com.server.osinspector.service.security;
 
 import com.server.osinspector.model.dto.login.LoginRequest;
 import com.server.osinspector.model.dto.login.TokenResponseDTO;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
-import java.time.Month;
 import java.util.Date;
-import java.util.function.Function;
 
 @Service
 public class JwtService {
 
     private final String SECRET = "tucano-ti";
+
     private final String API_KEY_VALIDA = "oryon_tech_assistencia_tecnica2344856721";
 
     private final long EXPIRATION = 1000 * 60 * 60 * 24; // 24h
